@@ -184,6 +184,7 @@ Prochaine vérification dans 30 minute(s)...
 - ✅ Check `credentials.json` is present
 - ✅ Verify OAuth consent screen is configured
 - ✅ Add your Gmail as a test user
+- 404 error on login : ✅ Check `localhost:8080/` is in authorized URI 
 
 **Emails not detected:**
 
