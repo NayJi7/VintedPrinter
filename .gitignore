@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Credentials & Secrets
+credentials.json
+token.json
+.env
+
+# Logs
+*.log
+vinted_printer.log
+
+# PDF files (uploaded documents)
+uploads/
+*.pdf
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# PyInstaller
+*.spec
+build.bat
+
+# Temporary files
+*.tmp
+*.temp
+
+# Images (sauf celles dans le README)
+*.png
+*.jpg
+*.jpeg
+!image/README/*.png
