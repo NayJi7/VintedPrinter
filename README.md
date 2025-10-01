@@ -110,9 +110,9 @@ This project helped me:
 ### Environment Variables (.env)
 
 ```env
-GMAIL_LABEL=Vinted Bordereaux    # Gmail label name
+GMAIL_LABEL=Label_Name           # Gmail label name
 CHECK_INTERVAL=90                # Check interval (minutes)
-PRINTER_NAME=Samsung CLX-3180    # Printer name
+PRINTER_NAME=Printer_Name        # Printer name
 WORK_START_HOUR=8                # Start time (24h format)
 WORK_END_HOUR=22                 # End time (24h format)
 LOG_LEVEL=INFO                   # Log level (DEBUG/INFO/WARNING/ERROR)
