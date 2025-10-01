@@ -1,7 +1,5 @@
 # Vinted Printer - Automatic Shipping Label Printer
 
----
-
 ## 📋 Project Description
 
 Vinted Printer is an automated solution for Vinted sellers that monitors your Gmail inbox, downloads shipping labels from Vinted emails, adds custom footers with article information, and automatically prints them on your printer. Perfect for managing multiple sales without manual intervention!
