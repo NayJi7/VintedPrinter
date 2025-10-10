@@ -2,6 +2,7 @@ import os
 import base64
 import logging
 from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -23,21 +24,52 @@ class GmailClient:
 
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
+                try:
+                    logger.info("Rafraîchissement du token d'accès...")
+                    creds.refresh(Request())
+                    logger.info("Token rafraîchi avec succès")
+                except RefreshError as e:
+                    logger.warning(f"Le token de rafraîchissement a expiré ou a été révoqué: {e}")
+                    logger.warning("Vérifiez que votre application Google Cloud est en mode 'Production' et non 'Testing'")
+                    logger.warning("Si en mode 'Testing', les tokens expirent après 7 jours")
+                    # Supprimer le token invalide
+                    if os.path.exists('token.json'):
+                        os.remove('token.json')
+                    # Forcer une nouvelle authentification
+                    creds = None
+
+            if not creds:
                 if not os.path.exists('credentials.json'):
                     raise FileNotFoundError(
                         "Le fichier credentials.json est introuvable. "
                         "Téléchargez-le depuis Google Cloud Console."
                     )
-                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-                creds = flow.run_local_server(port=8080, prompt='select_account')
+                logger.info("=" * 60)
+                logger.info("AUTHENTIFICATION REQUISE")
+                logger.info("Une fenêtre de navigateur va s'ouvrir pour vous authentifier.")
+                logger.info("Si elle ne s'ouvre pas, copiez l'URL affichée dans votre navigateur.")
+                logger.info("=" * 60)
+
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json',
+                    SCOPES,
+                    # Forcer l'accès offline pour obtenir un refresh token
+                )
+                creds = flow.run_local_server(
+                    port=8080,
+                    prompt='select_account',
+                    access_type='offline',  # Important : pour obtenir un refresh token
+                    include_granted_scopes='true'
+                )
+
+                logger.info("Authentification réussie ! Le token sera sauvegardé.")
 
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
+                logger.info("Token sauvegardé dans token.json")
 
         self.service = build('gmail', 'v1', credentials=creds)
-        logger.info("Authentification Gmail réussie")
+        logger.info("Client Gmail prêt")
 
     def get_label_id(self):
         """Récupère l'ID du label Gmail"""

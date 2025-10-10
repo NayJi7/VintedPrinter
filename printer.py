@@ -5,6 +5,7 @@ import subprocess
 import shutil
 import win32print
 import win32api
+import pywintypes
 from config import PRINTER_NAME
 
 logger = logging.getLogger(__name__)
@@ -12,6 +13,40 @@ logger = logging.getLogger(__name__)
 class Printer:
     def __init__(self):
         self.printer_name = PRINTER_NAME or self.get_default_printer()
+
+    def set_printer_to_grayscale(self):
+        """Configure l'imprimante pour imprimer en noir et blanc"""
+        if not self.printer_name:
+            return False
+
+        try:
+            # Ouvrir l'imprimante
+            printer_handle = win32print.OpenPrinter(self.printer_name)
+
+            try:
+                # Obtenir les paramètres par défaut de l'imprimante
+                properties = win32print.GetPrinter(printer_handle, 2)
+                pDevMode = properties["pDevMode"]
+
+                if pDevMode:
+                    # Définir le mode couleur sur noir et blanc (DMCOLOR_MONOCHROME = 1)
+                    pDevMode.Color = 1  # 1 = Monochrome, 2 = Color
+
+                    # Appliquer les changements
+                    properties["pDevMode"] = pDevMode
+                    win32print.SetPrinter(printer_handle, 2, properties, 0)
+                    logger.info(f"Imprimante '{self.printer_name}' configurée en noir et blanc")
+                    return True
+                else:
+                    logger.warning("Impossible de récupérer pDevMode de l'imprimante")
+                    return False
+
+            finally:
+                win32print.ClosePrinter(printer_handle)
+
+        except Exception as e:
+            logger.warning(f"Impossible de configurer l'imprimante en noir et blanc: {e}")
+            return False
 
     def get_default_printer(self):
         """Récupère l'imprimante par défaut si aucune n'est spécifiée"""
@@ -118,19 +153,23 @@ class Printer:
 
             logger.info(f"Impression de {os.path.basename(pdf_path)} sur {self.printer_name}")
 
+            # Configurer l'imprimante en noir et blanc
+            self.set_printer_to_grayscale()
+
             # Méthode 1: Utiliser SumatraPDF (le plus fiable pour l'impression automatique)
             sumatra_path = self.find_sumatra_pdf()
             if sumatra_path:
                 logger.info(f"Utilisation de SumatraPDF: {sumatra_path}")
                 try:
+                    # SumatraPDF avec option pour noir et blanc
                     result = subprocess.run(
-                        [sumatra_path, '-print-to', self.printer_name, '-silent', abs_path],
+                        [sumatra_path, '-print-to', self.printer_name, '-print-settings', 'monochrome', '-silent', abs_path],
                         capture_output=True,
                         timeout=30
                     )
 
                     if result.returncode == 0:
-                        logger.info(f"Impression de {os.path.basename(pdf_path)} envoyée avec succès via SumatraPDF")
+                        logger.info(f"Impression de {os.path.basename(pdf_path)} envoyée avec succès via SumatraPDF (noir et blanc)")
                         return True
                     else:
                         raise Exception(f"SumatraPDF returned code {result.returncode}")
