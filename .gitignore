@@ -37,6 +37,7 @@ vinted_printer.log
 
 # PDF files (uploaded documents)
 uploads/
+history/
 *.pdf
 
 # IDE

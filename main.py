@@ -2,6 +2,7 @@ import logging
 import sys
 import os
 import time
+import shutil
 from datetime import datetime
 from gmail_client import GmailClient
 from config import LOG_LEVEL, CHECK_INTERVAL, WORK_START_HOUR, WORK_END_HOUR
@@ -135,6 +136,10 @@ def process_emails():
 def print_uploaded_files(processed_emails, gmail_client):
     """Imprime tous les fichiers PDF présents dans le dossier uploads et marque les emails comme lus si réussi"""
     uploads_dir = "uploads"
+    history_dir = "history"
+
+    # Créer le dossier history s'il n'existe pas
+    os.makedirs(history_dir, exist_ok=True)
 
     if not os.path.exists(uploads_dir):
         return
@@ -164,12 +169,19 @@ def print_uploaded_files(processed_emails, gmail_client):
             logger.info(f"  ✓ Impression réussie")
             printed_files.append(pdf_path)
 
-            # Supprimer le fichier après impression réussie
+            # Déplacer le fichier vers history au lieu de le supprimer
             try:
-                os.remove(pdf_path)
-                logger.info(f"  ✓ Fichier supprimé après impression")
+                # Générer un nom unique avec timestamp pour éviter les doublons
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                base_name = os.path.splitext(pdf_file)[0]
+                extension = os.path.splitext(pdf_file)[1]
+                history_filename = f"{base_name}_{timestamp}{extension}"
+                history_path = os.path.join(history_dir, history_filename)
+
+                shutil.move(pdf_path, history_path)
+                logger.info(f"  ✓ Fichier déplacé vers history/{history_filename}")
             except Exception as e:
-                logger.error(f"  ✗ Impossible de supprimer le fichier: {e}")
+                logger.error(f"  ✗ Impossible de déplacer le fichier vers history: {e}")
         else:
             logger.error(f"  ✗ Échec de l'impression - fichier conservé pour réessayer plus tard")
 
