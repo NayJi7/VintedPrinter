@@ -1,7 +1,5 @@
 # Vinted Printer - Automatic Shipping Label Printer
 
----
-
 ## 📋 Project Description
 
 Vinted Printer is an automated solution for Vinted sellers that monitors your Gmail inbox, downloads shipping labels from Vinted emails, adds custom footers with article information, and automatically prints them on your printer. Perfect for managing multiple sales without manual intervention!
@@ -112,9 +110,9 @@ This project helped me:
 ### Environment Variables (.env)
 
 ```env
-GMAIL_LABEL=Vinted Bordereaux    # Gmail label name
+GMAIL_LABEL=Label_Name           # Gmail label name
 CHECK_INTERVAL=90                # Check interval (minutes)
-PRINTER_NAME=Samsung CLX-3180    # Printer name
+PRINTER_NAME=Printer_Name        # Printer name
 WORK_START_HOUR=8                # Start time (24h format)
 WORK_END_HOUR=22                 # End time (24h format)
 LOG_LEVEL=INFO                   # Log level (DEBUG/INFO/WARNING/ERROR)
@@ -186,17 +184,10 @@ Prochaine vérification dans 30 minute(s)...
 - ✅ Check `credentials.json` is present
 - ✅ Verify OAuth consent screen is configured
 - ✅ Add your Gmail as a test user
+- 404 error on login : ✅ Check `localhost:8080/` is in authorized URI 
 
 **Emails not detected:**
 
 - ✅ Create the Gmail label exactly as configured
 - ✅ Apply label to Vinted shipping emails
 - ✅ Check label name in `.env`
-
----
-
-## 👥 Contributors
-
-<a href="https://github.com/NayJi7/VintedPrinter/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=NayJi7/VintedPrinter" />
-</a>
