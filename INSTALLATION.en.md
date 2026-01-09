@@ -77,8 +77,9 @@ Before starting, you need to create a Google Cloud project and obtain credential
 1. Create a label in Gmail by going to Settings, See all settings, Labels, New Label, then filling it in like this for example
 
    ![1759350881950](image/README/1759350881950.png)
+   (UPADTE (09/01/2026) : Vinted changed its expedition mail to noreply@vinted.fr in France, maybe you'll have to remove the - between no and reply too)
 
-2. Create/edit the `.env` file in the project folder:
+3. Create/edit the `.env` file in the project folder:
 
    ```
    GMAIL_LABEL=Your_Label         # Vinted shipping labels label name
@@ -89,7 +90,7 @@ Before starting, you need to create a Google Cloud project and obtain credential
    LOG_LEVEL=INFO                 # log level
    ```
 
-3. Make sure the `credentials.json` file is present (Google API file)
+4. Make sure the `credentials.json` file is present (Google API file)
 
 ## Step 5: Run the Program
 
