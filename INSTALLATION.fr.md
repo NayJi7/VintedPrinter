@@ -77,7 +77,8 @@ Avant de commencer, vous devez créer un projet Google Cloud et obtenir les iden
 1. Créer un label dans gmail en allant dans paramètres, voir tous les paramètres, Libellés, Nouveau Libellé, puis en remplissant de cette façon par exemple
 
    ![1759350881950](image/README/1759350881950.png)
-2. Créer/éditer le fichier `.env` dans le dossier du projet :
+   (UPADTE (09/01/2026) : Vinted a changé son adresse d'expédition pour noreply@vinted.fr retirez bien le - entre no et reply)
+3. Créer/éditer le fichier `.env` dans le dossier du projet :
 
    ```
    GMAIL_LABEL=Votre_Label        # nom du label bordereaux vinted
@@ -87,7 +88,7 @@ Avant de commencer, vous devez créer un projet Google Cloud et obtenir les iden
    WORK_END_HOUR=22               # heure de fin de scan
    LOG_LEVEL=INFO                 # niveau de logs
    ```
-3. S'assurer que le fichier `credentials.json` est présent (fichier Google API)
+4. S'assurer que le fichier `credentials.json` est présent (fichier Google API)
 
 ## Étape 5 : Lancer le programme
 
